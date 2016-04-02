@@ -1,5 +1,3 @@
-#! /usr/bin/env python
-
 # Скрипт для проверки переходника USB - 16 UART.
 # Необходимо соеденить вывод TXD c выводом RXD для каждого порта.
 
@@ -10,11 +8,11 @@ print("Получение списка портов ...")
 ports = serial.tools.list_ports.comports()
 
 for port in ports:
-    if port[2] != "USB VID:PID=0403:6011":
+    if port.vid != 0x0403 or port.pid != 0x6011:
         continue
 
     maxBaudRate = 12000000
-    ser = serial.Serial(port[0], maxBaudRate, timeout=0.01)
+    ser = serial.Serial(port.device, maxBaudRate, timeout=0.01)
     print("Тест порта " + ser.name + " ... ", end = '')
 
     testString = "hello\n"
